@@ -1,0 +1,35 @@
+spring:
+  address: 192.168.101.90
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/commute?serverTimezone=Asia/Seoul
+    username: root
+    password: sua7308!?
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+    default-encoding: UTF-8
+    username: s21024@gsm.hs.kr
+    password: frjlxmjgxzadakkv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  redis:
+    host: 127.0.0.1
+    port: 6379
+jwt:
+  accessSecret: TVNHdGVhbXRvb2szJEAjIQ==TVNHdGVhbXRvb2szJEAjIQ==
+  refreshSecret: RGNVNSDJAdDVhbGRvb2HzJEAjIQ==TVNHdGVhbXRvb2szJEAjIQ==
