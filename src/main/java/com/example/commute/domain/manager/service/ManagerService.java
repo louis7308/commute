@@ -4,24 +4,32 @@ import com.example.commute.domain.manager.Manager;
 import com.example.commute.domain.manager.presentation.dto.request.SignInManagerRequest;
 import com.example.commute.domain.manager.presentation.dto.request.SignUpManagerRequest;
 import com.example.commute.domain.manager.presentation.dto.response.SignInManagerResponse;
+import com.example.commute.domain.manager.presentation.dto.response.UserListResponse;
 import com.example.commute.domain.manager.repository.ManagerRepository;
+import com.example.commute.domain.user.User;
 import com.example.commute.domain.user.exception.PasswordNotMatchException;
 import com.example.commute.domain.user.exception.UserExistException;
 import com.example.commute.domain.user.exception.UserNotFoundException;
-import com.example.commute.domain.user.presentation.dto.request.SignInUserRequest;
-import com.example.commute.domain.user.presentation.dto.request.SignUpRequest;
-import com.example.commute.domain.user.presentation.dto.response.SignInUserResponse;
+import com.example.commute.domain.user.repository.UserRepository;
+import com.example.commute.global.Util.UserUtil;
 import com.example.commute.global.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ManagerService {
     private final ManagerRepository managerRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
+    private final UserUtil userUtil;
 
     public void signup(SignUpManagerRequest signUpManagerRequest) {
         if(managerRepository.existsByEmail(signUpManagerRequest.getEmail())) {
@@ -44,5 +52,26 @@ public class ManagerService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    @Transactional
+    public void changeNickname(String nickname, String email) {
+        User user = userRepository.findByEmail(email);
+        user.changeNickname(nickname);
+        userRepository.save(user);
+    }
+
+    public List<UserListResponse> userList(String email) {
+        Optional<Manager> manager = managerRepository.findManagerByEmail(email);
+        List<UserListResponse> userListArray = new ArrayList<>();
+        userRepository.findByManager(manager).forEach(e -> userListArray.add(
+                UserListResponse.builder()
+                        .department(e.getManager().getDepartment())
+                        .place(e.getPlace())
+                        .policy(e.getManager().getCompany().getPolicy())
+                        .build()
+        ));
+
+        return userListArray;
     }
 }

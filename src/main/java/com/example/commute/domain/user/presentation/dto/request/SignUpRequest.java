@@ -25,7 +25,6 @@ public class SignUpRequest {
                 .email(email )
                 .password(password)
                 .nickname(nickname)
-                .policy(null)
                 .place(null)
                 .build();
     }

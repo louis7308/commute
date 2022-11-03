@@ -8,12 +8,15 @@ import com.example.commute.domain.user.presentation.dto.response.SignInUserRespo
 import com.example.commute.domain.user.exception.PasswordNotMatchException;
 import com.example.commute.domain.user.exception.UserExistException;
 import com.example.commute.domain.user.exception.UserNotFoundException;
+import com.example.commute.domain.user.presentation.dto.response.UserMainDataResponse;
 import com.example.commute.domain.user.repository.UserRepository;
 import com.example.commute.domain.user.service.UserService;
+import com.example.commute.global.Util.UserUtil;
 import com.example.commute.global.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final MailCheckerService mailCheckerService;
+    private final UserUtil userUtil;
 
     @Override
     public void signup(SignUpRequest signUpRequest) {
@@ -51,5 +55,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public void logout() {
 
+    }
+
+    @Override
+    @Transactional
+    public UserMainDataResponse mainDataLoad() {
+        User user = userUtil.currentUser();
+        String date = user.getWork().getWorkDate().toString().substring(14, 19) + user.getWork().getWorkDate().toString().substring(19, 19);
+        return UserMainDataResponse.builder()
+                .work_status(user.getWork().getStatus())
+                .work_date(date)
+                .place(user.getPlace())
+                .time(user.getWork().getTime())
+                .build();
     }
 }

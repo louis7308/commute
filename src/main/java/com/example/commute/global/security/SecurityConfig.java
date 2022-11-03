@@ -45,7 +45,7 @@ public class SecurityConfig {
                         "/email",
                         "/manager",
                         "/manager/login").permitAll()
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
         http
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

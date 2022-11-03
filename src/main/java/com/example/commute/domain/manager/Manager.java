@@ -1,5 +1,6 @@
 package com.example.commute.domain.manager;
 
+import com.example.commute.domain.company.Company;
 import com.example.commute.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +30,14 @@ public class Manager {
 
     private String refreshToken;
 
+    private String department;
+
     @OneToMany(mappedBy = "manager")
     private List<User> users = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;

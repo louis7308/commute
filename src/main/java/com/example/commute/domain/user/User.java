@@ -1,5 +1,7 @@
 package com.example.commute.domain.user;
 
+import com.example.commute.domain.calender.Calender;
+import com.example.commute.domain.calender.enums.PlaceStatus;
 import com.example.commute.domain.manager.Manager;
 import com.example.commute.domain.user.enums.Policy;
 import com.example.commute.domain.work.Work;
@@ -9,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -28,9 +32,7 @@ public class User {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Policy policy;
-
-    private String place;
+    private PlaceStatus place;
 
     private String refreshToken;
 
@@ -41,8 +43,15 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Work work;
 
+    @OneToMany(mappedBy = "user")
+    private List<Calender> calenders = new ArrayList<>();
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
     }
 
 }

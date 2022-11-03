@@ -1,13 +1,15 @@
 package com.example.commute.domain.company;
 
 import com.example.commute.domain.company.enums.PolicyStatus;
+import com.example.commute.domain.manager.Manager;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -24,5 +26,10 @@ public class Company {
 
     private String code;
 
+    @Column
+    @Enumerated(EnumType.STRING)
     private PolicyStatus policy;
+
+    @OneToMany(mappedBy = "company")
+    private List<Manager> manager = new ArrayList<>();
 }

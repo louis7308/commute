@@ -22,6 +22,7 @@ public class Work {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime workDate;
 
+    private LocalDateTime copyWorkDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime finishDate;
 
@@ -29,8 +30,7 @@ public class Work {
     @Enumerated(EnumType.STRING)
     private WorkStatus status;
 
-    @ColumnDefault("0")
-    private Integer time = 0;
+    private Integer time;
 
     @OneToOne
     @JoinColumn(name = "user_uuid")
@@ -38,15 +38,15 @@ public class Work {
 
 
 
-    public void updateWorkTime(LocalDateTime localDateTime) {
-        this.workDate = localDateTime;
+    public void updateCopyWorkTime(LocalDateTime localDateTime) {
+        this.copyWorkDate = localDateTime;
     }
 
     public void updateFinishTime(LocalDateTime localDateTime) {
         this.finishDate = localDateTime;
     }
 
-    public void updateTime(int time) {
+    public void updateTime(Integer time) {
         this.time = time;
     }
 
